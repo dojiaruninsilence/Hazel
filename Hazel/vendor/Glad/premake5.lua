@@ -1,9 +1,9 @@
 project "Glad"
 	kind "StaticLib"
 	language "C"
-	staticruntime "off"
-	runtime "release"
-	warnings "off"
+	staticruntime "on"
+	--[[ runtime "release"
+	warnings "off" ]]
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -30,7 +30,6 @@ project "Glad"
 
 	filter "system:windows"
 		systemversion "latest"
-		staticruntime "On"
 
 	filter "configurations:Debug"
 		runtime "Debug"
@@ -45,7 +44,6 @@ project "Glad"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "speed"
-		buildoptions "/MT"
 
     filter "configurations:Dist"
 		runtime "Release"
