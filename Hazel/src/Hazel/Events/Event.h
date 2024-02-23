@@ -50,9 +50,6 @@ namespace Hazel {
 		{
 			return GetCategoryFlags() & category;
 		}
-//this can probably be removerd--------------------------------------------
-//	protected:
-//		bool m_Handled = false;
 	};
 
 	class EventDispatcher
