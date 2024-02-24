@@ -36,13 +36,11 @@ namespace Hazel {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Layer* layer)
+	void Application::PushOverlay(Layer* overlay)
 	{
-		m_LayerStack.PushOverlay(layer);
-		layer->OnAttach();
+		m_LayerStack.PushOverlay(overlay);
 	}
 
 	void Application::OnEvent(Event& e)
