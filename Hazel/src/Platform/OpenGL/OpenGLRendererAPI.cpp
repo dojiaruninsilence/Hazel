@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "OpenGLRendererAPI.h"
+#include "Platform/OpenGL/OpenGLRendererAPI.h"
 
 #include <glad/gl.h>
 
@@ -30,7 +30,7 @@ namespace Hazel {
 
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexbuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
