@@ -3,6 +3,10 @@
 !vendor/bin/premake/
 bin-int/
 
+Sandbox/HazelProfile-Runtime.json
+Sandbox/HazelProfile-Shutdown.json
+Sandbox/HazelProfile-Startup.json
+
 # Visual Studio files and folder
 .vs/
 **.sln
