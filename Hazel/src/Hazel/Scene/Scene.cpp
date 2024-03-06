@@ -45,9 +45,29 @@ namespace Hazel {
 				});
 		}
 
+		//// Render 2D               ------------trans comp ui delete
+		//Camera* mainCamera = nullptr;
+		//glm::mat4* cameraTransform = nullptr;
+		//{
+		//	auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		//	for (auto entity : view)
+		//	{
+		//		auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+		//		if (camera.Primary)
+		//		{
+		//			mainCamera = &camera.Camera;
+		//			cameraTransform = &transform.Transform;
+		//			break;
+		//		}
+		//	}
+		//}
+
+
+		// trans comp ui start
 		// Render 2D
 		Camera* mainCamera = nullptr;
-		glm::mat4* cameraTransform = nullptr;
+		glm::mat4 cameraTransform;
 		{
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view)
@@ -57,22 +77,25 @@ namespace Hazel {
 				if (camera.Primary)
 				{
 					mainCamera = &camera.Camera;
-					cameraTransform = &transform.Transform;
+					cameraTransform = transform.GetTransform();
 					break;
 				}
 			}
 		}
+		// trans comp ui end
 
 		if (mainCamera)
 		{
-			Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform);
+			// Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform); -trans comp ui delete
+			Renderer2D::BeginScene(mainCamera->GetProjection(), cameraTransform);
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawQuad(transform, sprite.Color);
+				//Renderer2D::DrawQuad(transform, sprite.Color);  -trans comp ui delete
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color); // trans comp ui last line i wrote before stopping video is at 12:31 
 			}
 
 			Renderer2D::EndScene();
