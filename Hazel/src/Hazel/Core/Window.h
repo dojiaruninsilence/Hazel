@@ -61,8 +61,8 @@ namespace Hazel {
 		uint32_t Height;
 
 		WindowProps(const std::string& title = "Hazel Engine",
-			uint32_t width = 1280,
-			uint32_t height = 720)
+			uint32_t width = 1600, // hazel nut ui shine change was 1280 now 1600
+			uint32_t height = 900) // hazel nut ui shine change was 720 now 900
 			: Title(title), Width(width), Height(height)
 		{
 		}

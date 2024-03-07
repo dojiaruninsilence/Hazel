@@ -173,11 +173,20 @@ namespace Hazel {
 
 		// DockSpace
 		ImGuiIO& io = ImGui::GetIO();
+		// hazel nut ui shine up start ----------------------------------------------------------------------------------------------------------
+		// set the minimum width of the docking panels in the hazel nut ui
+		ImGuiStyle& style = ImGui::GetStyle();
+		float minWinSizeX = style.WindowMinSize.x;
+		style.WindowMinSize.x = 370.0f;
+		// hazel nut ui shine up end   ----------------------------------------------------------------------------------------------------------
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
+
+		//set the minimum width back after creating docking panels
+		style.WindowMinSize.x = minWinSizeX; // hazel nut ui shine up
 
 		if (ImGui::BeginMenuBar())
 		{
