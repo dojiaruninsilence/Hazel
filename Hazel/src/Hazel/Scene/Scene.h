@@ -1,9 +1,9 @@
 #pragma once
 
-#include "entt.hpp"
-
-
 #include "Hazel/Core/Timestep.h"
+#include "Hazel/Renderer/EditorCamera.h" //  edit cam
+
+#include "entt.hpp"
 
 namespace Hazel {
 
@@ -18,7 +18,8 @@ namespace Hazel {
 		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity entity); // add rem entts and comps first line video at 4:12
 
-		void OnUpdate(Timestep ts);
+		void OnUpdateRuntime(Timestep ts); // edit cam - vid at 10 29 -- was - void OnUpdate(Timestep ts); - before being changed
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera); // edit cam 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		Entity GetPrimaryCameraEntity(); // trans gizmos

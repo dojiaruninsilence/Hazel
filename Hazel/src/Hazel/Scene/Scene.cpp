@@ -37,7 +37,7 @@ namespace Hazel {
 	}
 	// add rem entts and comps end
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnUpdateRuntime(Timestep ts) // edit cam first line vid at 10 23 -- was - void Scene::OnUpdate(Timestep ts) - before being changed
 	{
 		// Update scripts
 		{
@@ -105,13 +105,30 @@ namespace Hazel {
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 				//Renderer2D::DrawQuad(transform, sprite.Color);  -trans comp ui delete
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color); // trans comp ui last line i wrote before stopping video is at 12:31 
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color); // trans comp ui
 			}
 
 			Renderer2D::EndScene();
 		}
 
 	}
+
+	// edit cam start-------------------------------------------
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+		}
+
+		Renderer2D::EndScene();
+	}
+	// edit cam end  -------------------------------------------
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
