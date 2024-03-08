@@ -129,7 +129,21 @@ namespace Hazel {
 
 	}
 
-	// add rem entts and comps
+	// trans gizmos start
+	Entity Scene::GetPrimaryCameraEntity()
+	{
+		auto view = m_Registry.view<CameraComponent>();
+		for (auto entity : view)
+		{
+			const auto& camera = view.get<CameraComponent>(entity);
+			if (camera.Primary)
+				return Entity{ entity, this };
+		}
+		return {};
+	}
+	// trans gizmos end
+
+	// add rem entts and comps start
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
@@ -161,6 +175,6 @@ namespace Hazel {
 	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
 	{
 	}
-	// add rem entts and end
+	// add rem entts and comps end
 
 }

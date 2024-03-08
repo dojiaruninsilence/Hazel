@@ -11,6 +11,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/gl.h>
 
+#include "ImGuizmo.h" // trans gizmos first line
+
 namespace Hazel {
 
 	ImGuiLayer::ImGuiLayer()
@@ -86,6 +88,7 @@ namespace Hazel {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame(); // trans gizmos first line --- vid at 11 02
 	}
 
 	void ImGuiLayer::End()

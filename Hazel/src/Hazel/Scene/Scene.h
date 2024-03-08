@@ -20,8 +20,10 @@ namespace Hazel {
 
 		void OnUpdate(Timestep ts);
 		void OnViewportResize(uint32_t width, uint32_t height);
-		// add rem entts and comps
+
+		Entity GetPrimaryCameraEntity(); // trans gizmos
 	private:
+		// add rem entts and comps
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 		// add rem entts and end
