@@ -53,6 +53,14 @@ namespace Hazel {
 		virtual void OnImGuiRender() override;
 		void OnEvent(Event& e) override;
 	private:
+		// open save dialogs start
+		bool OnKeyPressed(KeyPressedEvent& e); 
+
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
+		// open save dialogs end
+	private:
 		Hazel::OrthographicCameraController m_CameraController;
 
 		// Temp

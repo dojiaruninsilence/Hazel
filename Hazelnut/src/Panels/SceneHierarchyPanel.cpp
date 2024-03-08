@@ -17,6 +17,7 @@ namespace Hazel {
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
 	{
 		m_Context = context;
+		m_SelectionContext = {};  // open save dialogs
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()
