@@ -141,6 +141,11 @@ namespace Hazel {
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
+		// clear fb tex attach start 
+		// clear our entity id attachement (gl red int) to -1
+		m_Framebuffer->ClearAttachment(1, -1);
+		// clear fb tex attach end 
+
 		// Update scene
 		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera); // edit cam from OnUpdate to OnUpdateRuntime to OnUpdatEditor and now takes in the editorcamera.
 

@@ -7,7 +7,7 @@ namespace Hazel {
 
 	static const uint32_t s_MaxFrameBufferSize = 8192;
 
-	// multi rend and fb refact start ------ 
+	// multi rend and fb refact start ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	namespace Utils {
 
 		static GLenum TextureTarget(bool multisampled)
@@ -75,8 +75,22 @@ namespace Hazel {
 			}
 			return false;
 		}
+
+		// clear fb tex attach start----------------------------------------------------
+		static GLenum HazelFBTextureFormatToGL(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
+			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			}
+
+			HZ_CORE_ASSERT(false, "error in the HazelFBTextureFormatToGL() function")
+			return 0;
+		}
+		// clear fb tex attach end -----------------------------------------------------
 	}
-	// multi rend and fb refact end   ------ 
+	// multi rend and fb refact end   -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_Specification(spec)
@@ -221,6 +235,20 @@ namespace Hazel {
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
 	}
-
 	//  prep fb for mouse pick end
+
+	// clear fb tex attach start
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		HZ_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Error in OpenGLFramebuffer::ReadPixel() function!");
+
+	/*	int value = -1;
+		glClearTexImage(m_ColorAttachments[1], 0, GL_RED_INTEGER, GL_INT, &value);*/
+
+		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
+		spec.TextureFormat;
+
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::HazelFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+	}
+	// clear fb tex attach end
 }

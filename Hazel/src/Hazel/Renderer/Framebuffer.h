@@ -60,6 +60,8 @@ namespace Hazel {
 		virtual void Resize(uint32_t width, uint32_t height) = 0;
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;  //  prep fb for mouse pick
 
+		virtual void ClearAttachment(uint32_t attachmentIndex, int value) = 0; // clear fb tex attach
+
 		//virtual uint32_t GetColorAttachmentRendererID() const = 0;// multi rend and fb refact ---delete--
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const = 0;
 
