@@ -27,6 +27,7 @@ namespace Hazel {
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 
 		FramebufferSpecification fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth }; //  multi rend and fb refact
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
@@ -128,11 +129,11 @@ namespace Hazel {
 		}
 
 		// Update
-		if (m_ViewportFocused)
-		{
+		if (m_ViewportFocused)		
 			m_CameraController.OnUpdate(ts);
-			m_EditorCamera.OnUpdate(ts);
-		}
+
+		m_EditorCamera.OnUpdate(ts);
+		
 
 		// Render
 		Renderer2D::ResetStats();
@@ -278,15 +279,17 @@ namespace Hazel {
 
 			// Camera
 
-			//Runtime camera from entity. commented out only temp
+			//Runtime camera from entity. commented out only temp - commented out during edit cam
 			//auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
 			//const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
 			//const glm::mat4& cameraProjection = camera.GetProjection();
 			//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 
+			//edit cam start ---------------------------------------------
 			// editor camera 
 			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
 			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+			//edit cam end   ---------------------------------------------
 
 			// Entity transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
