@@ -18,6 +18,7 @@ namespace Hazel {
 		void OnImGuiRender();
 
 		Entity GetSelectedEntity() const { return m_SelectionContext; } // trans gizmos vid at 13 54
+		void SetSelectedEntity(Entity entity); // click to select entities
 	private:
 		void DrawEntityNode(Entity entity);
 		void DrawComponents(Entity entity);

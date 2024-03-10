@@ -111,6 +111,13 @@ namespace Hazel {
 		ImGui::End();
 	}
 
+	// click to select entities start
+	void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
+	{
+		m_SelectionContext = entity;
+	}	
+	// click to select entities end
+
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
 		auto& tag = entity.GetComponent<TagComponent>().Tag;

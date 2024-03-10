@@ -163,8 +163,13 @@ namespace Hazel {
 		//if the mouse is within the bounds of the viewport
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
+			// mouse picking start --------------------------------------------------------------------------------------
 			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
-			HZ_CORE_WARN("Pixel data = {0}", pixelData);
+			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
+			// mouse picking end   --------------------------------------------------------------------------------------
+
+			//int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);  // mouse picking delete
+			//HZ_CORE_WARN("Pixel data = {0}", pixelData); // mouse picking delete
 		}
 		//  prep fb for mouse pick end  ---------------
 
@@ -265,6 +270,12 @@ namespace Hazel {
 		m_SceneHierarchyPanel.OnImGuiRender();
 
 		ImGui::Begin("Stats");
+		// mouse picking start
+		std::string name = "None";
+		if (m_HoveredEntity && m_HoveredEntity.HasComponent<TagComponent>())
+			name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+		ImGui::Text("Hovered Entity: %s", name.c_str());
+		// mouse picking end
 
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -277,7 +288,14 @@ namespace Hazel {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
-		auto viewportOffset = ImGui::GetCursorPos(); // this includes the tab bar at the top ----- // prep fb for mouse pick
+		//auto viewportOffset = ImGui::GetCursorPos(); // this includes the tab bar at the top ----- // prep fb for mouse pick //pull request ---> delete - 419 fixed wrong viewport bounds when viewport tab bar is visible
+		//pull request start - 419 fixed wrong viewport bounds when viewport tab bar is visible
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+		//pull request end - 419 fixed wrong viewport bounds when viewport tab bar is visible
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
@@ -290,14 +308,14 @@ namespace Hazel {
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		// prep fb for mouse pick start
-		auto windowSize = ImGui::GetWindowSize();
+		/*auto windowSize = ImGui::GetWindowSize();
 		ImVec2 minBound = ImGui::GetWindowPos();
 		minBound.x += viewportOffset.x;
 		minBound.y += viewportOffset.y;
 
 		ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
 		m_ViewportBounds[0] = { minBound.x, minBound.y };
-		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
+		m_ViewportBounds[1] = { maxBound.x, maxBound.y };*/ //pull request----> delete <---- - 419 fixed wrong viewport bounds when viewport tab bar is visible
 		// prep fb for mouse pick end
 
 		// trans gizmos start ------------------------------
@@ -309,9 +327,10 @@ namespace Hazel {
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-			float windowWidth = (float)ImGui::GetWindowWidth();
+			/*float windowWidth = (float)ImGui::GetWindowWidth();
 			float windowHeight = (float)ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);*/ //pull request----> delete <---- - 419 fixed wrong viewport bounds when viewport tab bar is visible
+			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y); //pull request - 419 fixed wrong viewport bounds when viewport tab bar is visible
 
 			// Camera
 
@@ -372,6 +391,8 @@ namespace Hazel {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		// open save dialogs end
+		dispatcher.Dispatch<MouseButtonPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed)); // click to select entities start
+
 	}
 
 	// open save dialogs start
@@ -433,6 +454,17 @@ namespace Hazel {
 			// trans gizmos start-----------------------------------------------------------------------
 		}
 	}
+	// click to select entities start
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == Mouse::ButtonLeft)
+		{
+			if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+		}
+		return false;
+	}
+	// click to select entities end
 
 	void EditorLayer::NewScene()
 	{

@@ -57,6 +57,7 @@ namespace Hazel {
 	private:
 		// open save dialogs start
 		bool OnKeyPressed(KeyPressedEvent& e); 
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e); // click to select entities
 
 		void NewScene();
 		void OpenScene();
@@ -74,6 +75,8 @@ namespace Hazel {
 		Entity m_SquareEntity;
 		Entity m_CameraEntity;
 		Entity m_SecondCamera;
+
+		Entity m_HoveredEntity; // mouse picking
 
 		bool m_PrimaryCamera = true;
 

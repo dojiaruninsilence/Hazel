@@ -105,7 +105,8 @@ namespace Hazel {
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 				//Renderer2D::DrawQuad(transform, sprite.Color);  -trans comp ui delete
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color); // trans comp ui
+				//Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color); // trans comp ui  // mouse picking delete --- video was at 15 29
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity); // mouse picking
 			}
 
 			Renderer2D::EndScene();
@@ -123,7 +124,7 @@ namespace Hazel {
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity); // mouse picking
 		}
 
 		Renderer2D::EndScene();
